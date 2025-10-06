@@ -1,0 +1,59 @@
+{
+  "name": "AI Pre-IPO & Future Watchlist",
+  "description": "Private AI companies and proxy investments to monitor for future opportunities",
+  "updated": "2025-10-06",
+  "private_companies": [
+    {
+      "name": "OpenAI",
+      "sector": "Foundation Models",
+      "focus": "GPT series, ChatGPT, AI research",
+      "status": "Private (rumored valuation: $80B+)",
+      "proxy_exposure": ["MSFT - primary investor and partner"]
+    },
+    {
+      "name": "Anthropic",
+      "sector": "Foundation Models",
+      "focus": "Claude AI, AI safety research",
+      "status": "Private (valuation: $18B+)",
+      "proxy_exposure": ["GOOGL - major investor", "AMZN - strategic partner"]
+    },
+    {
+      "name": "Databricks",
+      "sector": "AI Data Platform",
+      "focus": "Unified data analytics, MLOps",
+      "status": "Private (rumored IPO 2025-2026, valuation: $43B)",
+      "proxy_exposure": ["MSFT - Azure integration"]
+    },
+    {
+      "name": "Scale AI",
+      "sector": "AI Training Data",
+      "focus": "Data labeling, model evaluation",
+      "status": "Private (valuation: $7B+)",
+      "proxy_exposure": []
+    },
+    {
+      "name": "Hugging Face",
+      "sector": "AI Model Hub",
+      "focus": "Open-source AI models, collaboration platform",
+      "status": "Private (valuation: $4.5B)",
+      "proxy_exposure": ["GOOGL - investor", "AMZN - investor"]
+    }
+  ],
+  "proxy_investments": [
+    {
+      "strategy": "OpenAI Exposure",
+      "primary": "MSFT",
+      "reasoning": "49% stake in OpenAI profits, exclusive cloud provider"
+    },
+    {
+      "strategy": "AI Venture Exposure",
+      "tickers": ["GOOGL", "MSFT", "AMZN"],
+      "reasoning": "All three have significant AI venture portfolios"
+    },
+    {
+      "strategy": "AI Infrastructure",
+      "tickers": ["NVDA", "AMD", "ARM"],
+      "reasoning": "Semiconductor plays for AI compute"
+    }
+  ]
+}

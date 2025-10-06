@@ -1,0 +1,55 @@
+{
+  "name": "AI Startups & Emerging Players",
+  "description": "Recently public or high-growth AI-focused companies",
+  "updated": "2025-10-06",
+  "companies": [
+    {
+      "ticker": "AI",
+      "name": "C3.ai Inc.",
+      "sector": "Enterprise AI",
+      "focus": "AI applications for enterprise, predictive maintenance",
+      "ipo_date": "2020-12-09",
+      "market_cap_range": "2B-5B"
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir Technologies Inc.",
+      "sector": "AI Data Analytics",
+      "focus": "Government & commercial data platforms, AI decision-making",
+      "ipo_date": "2020-09-30",
+      "market_cap_range": "50B+"
+    },
+    {
+      "ticker": "SOUN",
+      "name": "SoundHound AI Inc.",
+      "sector": "Voice AI",
+      "focus": "Voice recognition, conversational AI",
+      "ipo_date": "2022-04-28",
+      "market_cap_range": "500M-2B"
+    },
+    {
+      "ticker": "PATH",
+      "name": "UiPath Inc.",
+      "sector": "AI Automation",
+      "focus": "Robotic process automation, AI-powered workflows",
+      "ipo_date": "2021-04-21",
+      "market_cap_range": "5B-10B"
+    },
+    {
+      "ticker": "SNOW",
+      "name": "Snowflake Inc.",
+      "sector": "AI Data Platform",
+      "focus": "Cloud data warehouse, ML/AI workloads",
+      "ipo_date": "2020-09-16",
+      "market_cap_range": "50B+"
+    },
+    {
+      "ticker": "U",
+      "name": "Unity Software Inc.",
+      "sector": "AI for Gaming/3D",
+      "focus": "Game engine, real-time 3D AI, simulation",
+      "ipo_date": "2020-09-18",
+      "market_cap_range": "10B-20B"
+    }
+  ]
+}

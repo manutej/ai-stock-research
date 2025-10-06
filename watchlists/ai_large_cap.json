@@ -1,0 +1,56 @@
+{
+  "name": "AI Large Cap Leaders",
+  "description": "Major technology companies with significant AI investments and capabilities",
+  "updated": "2025-10-06",
+  "companies": [
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "sector": "AI Infrastructure - Chips",
+      "focus": "GPU computing, AI accelerators, data center",
+      "market_cap_range": "1T+"
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "sector": "AI Platforms & Services",
+      "focus": "Azure AI, OpenAI partnership, Copilot",
+      "market_cap_range": "2T+"
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc.",
+      "sector": "AI Research & Products",
+      "focus": "DeepMind, Gemini, Search AI, Cloud AI",
+      "market_cap_range": "1.5T+"
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "sector": "AI Research & Applications",
+      "focus": "LLaMA, AI infrastructure, recommendation systems",
+      "market_cap_range": "1T+"
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "sector": "AI Cloud Services",
+      "focus": "AWS AI/ML, Alexa, robotics, logistics AI",
+      "market_cap_range": "1.5T+"
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "sector": "AI Applications - Autonomous",
+      "focus": "Full Self-Driving, Optimus robot, Dojo supercomputer",
+      "market_cap_range": "700B+"
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "sector": "AI Consumer Devices",
+      "focus": "Neural Engine, Siri, on-device AI",
+      "market_cap_range": "3T+"
+    }
+  ]
+}
