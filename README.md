@@ -47,21 +47,28 @@ Leverages 7 Polygon.io MCP tools:
    cd /Users/manu/ASCIIDocs/CC_MCP/ai-stock-research
    ```
 
-2. **Install dependencies:**
+2. **Create and activate virtual environment:**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On macOS/Linux
+   # or: venv\Scripts\activate  # On Windows
+   ```
+
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Configure environment:**
+4. **Configure environment:**
    ```bash
    cp .env.example .env
    # Edit .env and add your API keys
    ```
 
-4. **Verify Polygon MCP connection:**
+5. **Verify Polygon MCP connection:**
    ```bash
-   claude mcp list
-   # Should show: polygon - ✓ Connected
+   python3 test_polygon.py quick
+   # Should show: ✅ Connection working!
    ```
 
 ## Usage
@@ -107,17 +114,23 @@ await tool.research_query("Compare R&D spending across NVDA, GOOGL, and MSFT")
 ### Command Line Interface
 
 ```bash
-# Run interactive research session
-python client.py
+# Activate virtual environment first
+source venv/bin/activate
 
-# Run specific query
-python client.py --query "Latest price for NVDA"
+# Run quick connection test
+python3 test_polygon.py quick
 
-# Morning brief automation
-python queries/morning_brief.py
+# Run full test suite
+python3 test_polygon.py
 
-# IPO tracker
-python queries/ipo_tracker.py
+# Test AI watchlist companies
+python3 test_polygon.py watchlist
+
+# Run interactive research session (coming soon)
+python3 client.py
+
+# Run specific query (coming soon)
+python3 client.py --query "Latest price for NVDA"
 ```
 
 ## Project Structure
@@ -181,6 +194,10 @@ Compare AI companies across metrics like R&D spend, revenue growth, and market p
 1. **Polygon.io** (Required)
    - Free tier: 5 API calls/minute
    - Get key: https://polygon.io/dashboard/signup
+   - ⚠️ **Free Tier Limitations**: Real-time prices and trade data require paid subscription
+     - ✅ **Works on Free Tier**: News, financial statements, market status
+     - ❌ **Requires Paid Plan**: Real-time prices ($99/mo), trade history ($249/mo)
+     - See [TEST_RESULTS.md](TEST_RESULTS.md) for complete API access matrix
 
 2. **OpenAI** (Optional - for advanced NLP)
    - Enhanced query understanding
@@ -208,9 +225,10 @@ Edit JSON files in `/watchlists/` to customize tracked companies:
 ### Phase 1: MVP (Current)
 - [x] Basic Polygon MCP integration
 - [x] AI company watchlists
-- [x] Simple query patterns
+- [x] Comprehensive test suite
+- [x] API tier documentation
 - [ ] Core client implementation
-- [ ] Basic analysis tools
+- [ ] Basic analysis tools (focus on free tier: news & financials)
 
 ### Phase 2: Intelligence Layer
 - [ ] LLM-powered query parsing
