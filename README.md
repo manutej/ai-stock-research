@@ -86,7 +86,33 @@ See [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md) for complete details.
 
 ## Usage
 
-### Quick Start Examples
+### Command Line Tool (FinWiz)
+
+**Get stock data in 1 command - no API keys needed!**
+
+```bash
+# Quick quote
+python3 finwiz.py quote NVDA
+
+# Multiple quotes
+python3 finwiz.py quotes NVDA MSFT GOOGL
+
+# Morning brief
+python3 finwiz.py morning-brief
+
+# Compare stocks
+python3 finwiz.py compare NVDA AMD INTC
+
+# Get news
+python3 finwiz.py news NVDA
+
+# View watchlist
+python3 finwiz.py watchlist
+```
+
+See [QUICK_START.md](QUICK_START.md) for complete guide.
+
+### Python API Examples
 
 #### 1. Morning AI Sector Brief
 ```python
