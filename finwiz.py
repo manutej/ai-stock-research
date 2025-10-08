@@ -6,13 +6,34 @@ A simple, safe command-line interface for researching AI sector stocks.
 Uses free YFinance data by default, with optional Polygon integration.
 
 Usage:
-    finwiz quote NVDA
-    finwiz quotes NVDA MSFT GOOGL
-    finwiz news NVDA
-    finwiz financials GOOGL
-    finwiz history MSFT --days 30
-    finwiz watchlist
-    finwiz morning-brief
+    # Quick quote (default)
+    finwiz NVDA
+
+    # Multiple quotes
+    finwiz -r NVDA MSFT GOOGL
+    finwiz --quotes NVDA MSFT GOOGL
+
+    # News
+    finwiz -n NVDA
+    finwiz --news NVDA --limit 10
+
+    # Financials
+    finwiz -f GOOGL
+    finwiz --financials GOOGL
+
+    # History
+    finwiz -H MSFT
+    finwiz --history MSFT --days 90
+
+    # Compare
+    finwiz -c NVDA AMD INTC
+    finwiz --compare NVDA AMD INTC
+
+    # Watchlist & Brief
+    finwiz -w
+    finwiz --watchlist
+    finwiz -b
+    finwiz --morning-brief
 """
 import asyncio
 import sys
@@ -297,80 +318,130 @@ async def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  finwiz quote NVDA
-  finwiz quotes NVDA MSFT GOOGL
-  finwiz news NVDA
-  finwiz financials GOOGL
-  finwiz history MSFT --days 30
-  finwiz watchlist
-  finwiz morning-brief
-  finwiz compare NVDA AMD INTC
+  finwiz NVDA                    # Quick quote (default)
+  finwiz -r NVDA MSFT GOOGL      # Multiple quotes
+  finwiz -n NVDA                 # Latest news
+  finwiz -f GOOGL                # Financial statements
+  finwiz -H MSFT --days 90       # Price history
+  finwiz -c NVDA AMD INTC        # Compare stocks
+  finwiz -w                      # Show watchlist
+  finwiz -b                      # Morning brief
+
+Operation Flags:
+  -r, --quotes          Get quotes for multiple stocks
+  -n, --news            Get recent news articles
+  -f, --financials      Get financial statements
+  -H, --history         Get price history
+  -c, --compare         Compare multiple stocks
+  -w, --watchlist       Show AI stock watchlist
+  -b, --morning-brief   Generate morning brief
+
+Options:
+  --limit N             Number of news articles (default: 5)
+  --periods N           Number of financial periods (default: 4)
+  --days N              Number of days for history (default: 30)
+
+Notes:
+  - Without flags, defaults to single stock quote
+  - All tickers are automatically uppercased
+  - Uses free YFinance data by default (no API key needed!)
         """
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    # Operation flags (mutually exclusive)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-r', '--quotes', action='store_true',
+                      help='Get quotes for multiple stocks')
+    group.add_argument('-n', '--news', action='store_true',
+                      help='Get recent news articles')
+    group.add_argument('-f', '--financials', action='store_true',
+                      help='Get financial statements')
+    group.add_argument('-H', '--history', action='store_true',
+                      help='Get price history')
+    group.add_argument('-c', '--compare', action='store_true',
+                      help='Compare multiple stocks')
+    group.add_argument('-w', '--watchlist', action='store_true',
+                      help='Show AI stock watchlist')
+    group.add_argument('-b', '--morning-brief', action='store_true',
+                      help='Generate morning brief')
 
-    # Quote command
-    quote_parser = subparsers.add_parser('quote', help='Get quote for a single stock')
-    quote_parser.add_argument('ticker', help='Stock ticker symbol')
+    # Positional arguments (tickers)
+    parser.add_argument('tickers', nargs='*',
+                       help='Stock ticker symbols (e.g., NVDA MSFT GOOGL)')
 
-    # Quotes command
-    quotes_parser = subparsers.add_parser('quotes', help='Get quotes for multiple stocks')
-    quotes_parser.add_argument('tickers', nargs='+', help='Stock ticker symbols')
-
-    # News command
-    news_parser = subparsers.add_parser('news', help='Get recent news')
-    news_parser.add_argument('ticker', nargs='?', help='Stock ticker symbol (optional)')
-    news_parser.add_argument('--limit', type=int, default=5, help='Number of articles')
-
-    # Financials command
-    fin_parser = subparsers.add_parser('financials', help='Get financial statements')
-    fin_parser.add_argument('ticker', help='Stock ticker symbol')
-    fin_parser.add_argument('--periods', type=int, default=4, help='Number of periods')
-
-    # History command
-    hist_parser = subparsers.add_parser('history', help='Get price history')
-    hist_parser.add_argument('ticker', help='Stock ticker symbol')
-    hist_parser.add_argument('--days', type=int, default=30, help='Number of days')
-
-    # Watchlist command
-    subparsers.add_parser('watchlist', help='Show AI stock watchlist')
-
-    # Morning brief command
-    subparsers.add_parser('morning-brief', help='Generate morning brief')
-
-    # Compare command
-    compare_parser = subparsers.add_parser('compare', help='Compare multiple stocks')
-    compare_parser.add_argument('tickers', nargs='+', help='Stock ticker symbols')
+    # Optional parameters
+    parser.add_argument('--limit', type=int, default=5,
+                       help='Number of news articles (default: 5)')
+    parser.add_argument('--periods', type=int, default=4,
+                       help='Number of financial periods (default: 4)')
+    parser.add_argument('--days', type=int, default=30,
+                       help='Number of days for history (default: 30)')
 
     args = parser.parse_args()
 
-    if not args.command:
+    # Determine operation
+    if args.watchlist:
+        # Watchlist - no tickers needed
+        async with FinWiz() as finwiz:
+            await finwiz.cmd_watchlist()
+
+    elif args.morning_brief:
+        # Morning brief - no tickers needed
+        async with FinWiz() as finwiz:
+            await finwiz.cmd_morning_brief()
+
+    elif not args.tickers:
+        # No tickers provided
         parser.print_help()
         return
 
-    # Run command
-    async with FinWiz() as finwiz:
-        if args.command == 'quote':
-            await finwiz.cmd_quote(args.ticker.upper())
-        elif args.command == 'quotes':
-            await finwiz.cmd_quotes([t.upper() for t in args.tickers])
-        elif args.command == 'news':
-            ticker = args.ticker.upper() if args.ticker else None
-            await finwiz.cmd_news(ticker, args.limit)
-        elif args.command == 'financials':
-            await finwiz.cmd_financials(args.ticker.upper(), args.periods)
-        elif args.command == 'history':
-            await finwiz.cmd_history(args.ticker.upper(), args.days)
-        elif args.command == 'watchlist':
-            await finwiz.cmd_watchlist()
-        elif args.command == 'morning-brief':
-            await finwiz.cmd_morning_brief()
-        elif args.command == 'compare':
-            await finwiz.cmd_compare([t.upper() for t in args.tickers])
+    else:
+        # Operations requiring tickers
+        tickers = [t.upper() for t in args.tickers]
+
+        async with FinWiz() as finwiz:
+            if args.quotes:
+                # Multiple quotes
+                await finwiz.cmd_quotes(tickers)
+
+            elif args.news:
+                # News for first ticker (or all if no ticker)
+                ticker = tickers[0] if tickers else None
+                await finwiz.cmd_news(ticker, args.limit)
+
+            elif args.financials:
+                # Financials for first ticker
+                if not tickers:
+                    print("Error: Please specify a ticker symbol")
+                    return
+                await finwiz.cmd_financials(tickers[0], args.periods)
+
+            elif args.history:
+                # History for first ticker
+                if not tickers:
+                    print("Error: Please specify a ticker symbol")
+                    return
+                await finwiz.cmd_history(tickers[0], args.days)
+
+            elif args.compare:
+                # Compare multiple tickers
+                if len(tickers) < 2:
+                    print("Error: Please specify at least 2 tickers to compare")
+                    return
+                await finwiz.cmd_compare(tickers)
+
+            else:
+                # Default: single quote
+                if len(tickers) > 1:
+                    # Multiple tickers without -r flag? Show quotes
+                    await finwiz.cmd_quotes(tickers)
+                else:
+                    # Single ticker - detailed quote
+                    await finwiz.cmd_quote(tickers[0])
 
 
-if __name__ == "__main__":
+def main_sync():
+    """Synchronous wrapper for console script entry point"""
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
@@ -379,3 +450,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n❌ Error: {e}")
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main_sync()
