@@ -9,6 +9,7 @@ fastmcp>=0.2.0
 # Data and analysis
 pandas>=2.0.0
 numpy>=1.24.0
+yfinance>=0.2.48
 
 # Async support
 asyncio

@@ -12,33 +12,43 @@ This tool provides comprehensive research capabilities for AI sector investments
 ## Features
 
 ### Core Capabilities
-- 📊 **Real-time Market Data** - Live prices, trades, and market snapshots
+- 📊 **Real-time Market Data** - Live prices via YFinance (FREE!) or Polygon (paid)
 - 📰 **AI News Monitoring** - Track announcements, funding rounds, product launches
 - 📈 **Historical Analysis** - Price trends, trading patterns, performance metrics
 - 💰 **Financial Fundamentals** - Revenue, R&D spending, growth analysis
 - 🎯 **Smart Alerts** - Custom triggers for price movements and AI-related events
 - 🔍 **Sector Comparison** - Compare AI companies across key metrics
+- 🔌 **Modular Architecture** - Switch between YFinance, Polygon, or Hybrid providers
 
-### MCP Tools Integration
+### Data Providers
 
-Leverages 7 Polygon.io MCP tools:
+**Modular provider architecture** allows switching between data sources:
 
-| Tool | Purpose | Example Use |
-|------|---------|-------------|
-| `get_aggs` | OHLC aggregates | Track NVDA price movements |
-| `list_trades` | Historical trades | Analyze trading patterns during AI news |
-| `get_last_trade` | Latest trade | Real-time price monitoring |
-| `list_ticker_news` | Company news | Track AI announcements, funding rounds |
-| `get_snapshot_ticker` | Market snapshot | Quick AI stock performance overview |
-| `get_market_status` | Trading hours | Schedule automated analysis |
-| `list_stock_financials` | Fundamentals | Revenue growth, R&D spending |
+| Provider | Cost | Real-time | Best For |
+|----------|------|-----------|----------|
+| **YFinance** | 100% Free | ~15min delay | Development, quotes, historicals |
+| **Polygon** | Freemium | Paid tier only | Production news, financials |
+| **Hybrid** | Free + Optional | ✅ Yes (via YF) | **Recommended** - Best of both! |
+
+**Quick Start with Free Provider:**
+```python
+from providers.factory import ProviderFactory, ProviderStrategy
+
+# Get real-time prices FREE using YFinance
+provider = ProviderFactory.create_provider(ProviderStrategy.YFINANCE_ONLY)
+async with provider:
+    quote = await provider.get_quote("NVDA")
+    print(f"NVDA: ${quote.price:.2f}")  # Real price, no API key needed!
+```
+
+See [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md) for complete details.
 
 ## Installation
 
 ### Prerequisites
 - Python 3.10+
-- Polygon.io API key ([Get free key](https://polygon.io/dashboard/signup))
-- Claude CLI with Polygon MCP server configured
+- **Optional**: Polygon.io API key for news ([Get free key](https://polygon.io/dashboard/signup))
+- **Note**: YFinance provider works without any API keys!
 
 ### Setup
 
@@ -65,10 +75,13 @@ Leverages 7 Polygon.io MCP tools:
    # Edit .env and add your API keys
    ```
 
-5. **Verify Polygon MCP connection:**
+5. **Test providers:**
    ```bash
-   python3 test_polygon.py quick
-   # Should show: ✅ Connection working!
+   # Test YFinance (100% free, no API key needed)
+   python3 test_providers.py yfinance
+
+   # Test all providers
+   python3 test_providers.py
    ```
 
 ## Usage

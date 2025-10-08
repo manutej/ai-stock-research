@@ -18,6 +18,11 @@ class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
+    # Data Provider Selection
+    # Options: "polygon", "yfinance", "auto"
+    # "auto" will use yfinance for quotes (free) and polygon for news/financials
+    DEFAULT_PROVIDER = os.getenv("DEFAULT_PROVIDER", "auto")
+
     # Project paths
     BASE_DIR = Path(__file__).parent
     WATCHLISTS_DIR = BASE_DIR / "watchlists"
