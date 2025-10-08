@@ -50,39 +50,45 @@ See [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md) for complete details.
 - **Optional**: Polygon.io API key for news ([Get free key](https://polygon.io/dashboard/signup))
 - **Note**: YFinance provider works without any API keys!
 
-### Setup
+### Quick Setup (Recommended)
 
 1. **Clone and navigate:**
    ```bash
    cd /Users/manu/ASCIIDocs/CC_MCP/ai-stock-research
    ```
 
-2. **Create and activate virtual environment:**
+2. **Create virtual environment:**
    ```bash
    python3 -m venv venv
-   source venv/bin/activate  # On macOS/Linux
-   # or: venv\Scripts\activate  # On Windows
+   source venv/bin/activate
    ```
 
-3. **Install dependencies:**
+3. **Install FinWiz:**
    ```bash
    pip install -r requirements.txt
+   pip install -e .
    ```
 
-4. **Configure environment:**
+4. **Add to shell (for global access):**
+
+   Add this line to your `~/.zshrc` (or `~/.bashrc`):
    ```bash
-   cp .env.example .env
-   # Edit .env and add your API keys
+   source /Users/manu/ASCIIDocs/CC_MCP/ai-stock-research/finwiz_aliases.sh
    ```
 
-5. **Test providers:**
+5. **Reload shell:**
    ```bash
-   # Test YFinance (100% free, no API key needed)
-   python3 test_providers.py yfinance
-
-   # Test all providers
-   python3 test_providers.py
+   source ~/.zshrc
    ```
+
+   You should see: `✓ FinWiz aliases loaded`
+
+6. **Test it works:**
+   ```bash
+   finwiz NVDA  # Run from any directory!
+   ```
+
+For detailed setup options, see [SETUP.md](SETUP.md).
 
 ## Usage
 
@@ -90,24 +96,22 @@ See [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md) for complete details.
 
 **Get stock data in 1 command - no API keys needed!**
 
+With global installation (recommended):
 ```bash
-# Quick quote
-python3 finwiz.py quote NVDA
+finwiz NVDA                    # Quick quote (default)
+finwiz -r NVDA MSFT GOOGL      # Multiple quotes
+finwiz -n NVDA                 # Latest news
+finwiz -f GOOGL                # Financial statements
+finwiz -H MSFT --days 90       # Price history
+finwiz -c NVDA AMD INTC        # Compare stocks
+finwiz -w                      # Show watchlist
+finwiz -b                      # Morning brief
+```
 
-# Multiple quotes
-python3 finwiz.py quotes NVDA MSFT GOOGL
-
-# Morning brief
-python3 finwiz.py morning-brief
-
-# Compare stocks
-python3 finwiz.py compare NVDA AMD INTC
-
-# Get news
-python3 finwiz.py news NVDA
-
-# View watchlist
-python3 finwiz.py watchlist
+Or run directly:
+```bash
+python3 finwiz.py NVDA
+./activate_finwiz.sh NVDA
 ```
 
 See [QUICK_START.md](QUICK_START.md) for complete guide.
