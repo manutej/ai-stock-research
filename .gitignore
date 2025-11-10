@@ -43,7 +43,9 @@ env/
 # Cache and temporary files
 *.cache
 .pytest_cache/
+.hypothesis/
 .coverage
+coverage.xml
 htmlcov/
 *.log
 
