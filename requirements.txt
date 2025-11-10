@@ -12,7 +12,6 @@ numpy>=1.24.0
 yfinance>=0.2.48
 
 # Async support
-asyncio
 aiohttp>=3.9.0
 
 # Utilities
