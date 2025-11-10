@@ -53,3 +53,7 @@ htmlcov/
 *.sqlite3
 data/
 cache/
+
+# GitHub workflows (requires special permissions to commit)
+# See .github/README.md for manual setup instructions
+.github/
