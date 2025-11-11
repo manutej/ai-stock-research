@@ -18,6 +18,11 @@ from providers.base import (
     MarketStatus
 )
 from polygon_mcp import PolygonMCPClient
+from logging_config import get_logger
+from rate_limiter import get_rate_limiter
+from exceptions import ProviderError, RateLimitExceededError
+
+logger = get_logger(__name__)
 
 
 class PolygonProvider(StockDataProvider):
@@ -46,6 +51,8 @@ class PolygonProvider(StockDataProvider):
     def __init__(self, api_key: Optional[str] = None, **kwargs):
         super().__init__(api_key=api_key, **kwargs)
         self._client: Optional[PolygonMCPClient] = None
+        self.rate_limiter = get_rate_limiter()
+        logger.info("Polygon provider initialized with rate limiting (5 req/min)")
 
     async def connect(self) -> None:
         """Establish connection to Polygon MCP server"""
@@ -71,6 +78,13 @@ class PolygonProvider(StockDataProvider):
         """
         if not self._connected:
             await self.connect()
+
+        # Rate limiting check
+        try:
+            self.rate_limiter.check_limit("polygon")
+        except RateLimitExceededError as e:
+            logger.warning(f"Rate limit exceeded for Polygon API: {e}")
+            raise
 
         # Try to get snapshot first (most complete data)
         try:
@@ -149,6 +163,13 @@ class PolygonProvider(StockDataProvider):
         if not self._connected:
             await self.connect()
 
+        # Rate limiting check
+        try:
+            self.rate_limiter.check_limit("polygon")
+        except RateLimitExceededError as e:
+            logger.warning(f"Rate limit exceeded for Polygon API: {e}")
+            raise
+
         # Map timeframe to Polygon format
         timespan_map = {
             "1m": "minute",
@@ -192,6 +213,13 @@ class PolygonProvider(StockDataProvider):
         if not self._connected:
             await self.connect()
 
+        # Rate limiting check
+        try:
+            self.rate_limiter.check_limit("polygon")
+        except RateLimitExceededError as e:
+            logger.warning(f"Rate limit exceeded for Polygon API: {e}")
+            raise
+
         news_data = await self._client.get_news(ticker=ticker, limit=limit)
 
         articles = []
@@ -219,6 +247,13 @@ class PolygonProvider(StockDataProvider):
         """Get financial statements"""
         if not self._connected:
             await self.connect()
+
+        # Rate limiting check
+        try:
+            self.rate_limiter.check_limit("polygon")
+        except RateLimitExceededError as e:
+            logger.warning(f"Rate limit exceeded for Polygon API: {e}")
+            raise
 
         financials_data = await self._client.get_financials(ticker=ticker, limit=limit)
 
@@ -251,6 +286,13 @@ class PolygonProvider(StockDataProvider):
         """Get current market status"""
         if not self._connected:
             await self.connect()
+
+        # Rate limiting check
+        try:
+            self.rate_limiter.check_limit("polygon")
+        except RateLimitExceededError as e:
+            logger.warning(f"Rate limit exceeded for Polygon API: {e}")
+            raise
 
         status_data = await self._client.get_market_status()
 
