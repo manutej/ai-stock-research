@@ -160,6 +160,150 @@ def mock_rate_limiter():
     return limiter
 
 
+@pytest.fixture
+def sample_sp500_companies():
+    """Sample S&P 500 companies for testing"""
+    return [
+        {"ticker": "AAPL", "name": "Apple Inc.", "sector": "Technology"},
+        {"ticker": "MSFT", "name": "Microsoft Corporation", "sector": "Technology"},
+        {"ticker": "JPM", "name": "JPMorgan Chase & Co.", "sector": "Financials"},
+        {"ticker": "JNJ", "name": "Johnson & Johnson", "sector": "Healthcare"},
+        {"ticker": "WMT", "name": "Walmart Inc.", "sector": "Consumer Staples"},
+    ]
+
+
+@pytest.fixture
+def sample_advanced_companies():
+    """Sample S&P 500 companies with industry info for advanced tests"""
+    return [
+        {
+            "ticker": "AAPL",
+            "name": "Apple Inc.",
+            "sector": "Technology",
+            "industry": "Consumer Electronics"
+        },
+        {
+            "ticker": "MSFT",
+            "name": "Microsoft Corporation",
+            "sector": "Technology",
+            "industry": "Software"
+        },
+        {
+            "ticker": "JPM",
+            "name": "JPMorgan Chase & Co.",
+            "sector": "Financials",
+            "industry": "Banking"
+        },
+    ]
+
+
+@pytest.fixture
+def mock_quote():
+    """Mock quote object for testing"""
+    from providers.base import Quote
+    return Quote(
+        ticker="AAPL",
+        price=150.25,
+        timestamp=datetime.now(),
+        volume=50000000,
+        bid=150.20,
+        ask=150.30,
+        open=149.50,
+        high=151.00,
+        low=149.00,
+        previous_close=149.00,
+        change=1.25,
+        change_percent=0.84,
+        provider="mock"
+    )
+
+
+@pytest.fixture
+def mock_quotes(sample_sp500_companies):
+    """Mock quotes dictionary for multiple tickers"""
+    from providers.base import Quote
+    quotes = {}
+    for i, company in enumerate(sample_sp500_companies):
+        quotes[company["ticker"]] = Quote(
+            ticker=company["ticker"],
+            price=150.0 + i * 50,
+            timestamp=datetime.now(),
+            volume=50000000 - i * 5000000,
+            change=1.25 - i * 0.5,
+            change_percent=0.84 - i * 0.2,
+            open=149.0 + i * 50,
+            high=152.0 + i * 50,
+            low=148.0 + i * 50,
+            provider="mock"
+        )
+    return quotes
+
+
+@pytest.fixture
+def mock_stock_provider():
+    """Mock stock data provider for testing"""
+    from unittest.mock import AsyncMock
+    provider = AsyncMock()
+    provider.__aenter__ = AsyncMock(return_value=provider)
+    provider.__aexit__ = AsyncMock(return_value=None)
+    provider.provider_name = "mock"
+    return provider
+
+
+@pytest.fixture
+def sample_fundamental_data():
+    """Sample fundamental data from yfinance"""
+    return {
+        "marketCap": 2500000000000,
+        "enterpriseValue": 2600000000000,
+        "trailingPE": 28.5,
+        "forwardPE": 25.3,
+        "priceToBook": 45.2,
+        "priceToSales": 7.5,
+        "pegRatio": 2.1,
+        "revenue": 383000000000,
+        "revenueGrowth": 0.08,
+        "earningsGrowth": 0.12,
+        "earningsQuarterlyGrowth": 0.10,
+        "profitMargin": 0.25,
+        "operatingMargin": 0.30,
+        "grossMargin": 0.42,
+        "returnOnEquity": 1.47,
+        "returnOnAssets": 0.20,
+        "eps": 6.05,
+        "forwardEps": 6.50,
+        "bookValue": 3.35,
+        "dividendYield": 0.005,
+        "payoutRatio": 0.15,
+        "beta": 1.2,
+        "fiftyTwoWeekHigh": 180.00,
+        "fiftyTwoWeekLow": 125.00,
+        "targetMeanPrice": 170.00,
+        "recommendationKey": "buy",
+    }
+
+
+@pytest.fixture
+def mock_yfinance_ticker(sample_fundamental_data):
+    """Mock yfinance Ticker object with comprehensive data"""
+    ticker = Mock()
+    ticker.info = sample_fundamental_data
+
+    # Mock history data
+    import pandas as pd
+    dates = pd.date_range(start=datetime.now() - timedelta(days=7), periods=7, freq='D')
+    hist_data = pd.DataFrame({
+        'Open': [185.0, 186.0, 184.5, 185.5, 187.0, 186.5, 185.0],
+        'High': [186.5, 187.0, 185.5, 186.5, 188.0, 187.5, 186.0],
+        'Low': [184.0, 185.5, 183.5, 184.5, 186.0, 185.5, 184.0],
+        'Close': [185.5, 186.5, 184.0, 186.0, 187.5, 186.0, 185.0],
+        'Volume': [50000000, 45000000, 55000000, 48000000, 52000000, 46000000, 49000000]
+    }, index=dates)
+    ticker.history = Mock(return_value=hist_data)
+
+    return ticker
+
+
 @pytest.fixture(autouse=True)
 def reset_global_state():
     """Reset global state between tests"""
