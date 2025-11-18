@@ -1,10 +1,42 @@
-# AI Stock Research Tool
+# FinWiz - AI Stock Research Tool
 
-> An intelligent stock research assistant leveraging Polygon.io MCP server to track and analyze AI sector companies using real-time and historical market data.
+> Simple, fast, and free stock research from your terminal.
+> **Zero configuration • No API keys needed • Works immediately**
 
-## Overview
+```bash
+$ finwiz NVDA
 
-This tool provides comprehensive research capabilities for AI sector investments, focusing on:
+📊 Quote for NVDA
+============================================================
+
+Price:     $495.23
+Change:    +12.45 (+2.58%)
+Volume:    45,678,900
+```
+
+## Why FinWiz?
+
+- ✅ **Works immediately** - No setup, no configuration, no API keys required
+- ✅ **100% Free** - Uses YFinance data by default (optional premium providers)
+- ✅ **Simple commands** - `finwiz NVDA` gets you what you need
+- ✅ **Rich data** - Quotes, news, financials, history, comparisons
+- ✅ **Production-ready** - Comprehensive test suite, robust architecture
+
+## Quickstart (30 seconds)
+
+```bash
+# 1. Install
+pip install -e .
+
+# 2. Run
+finwiz NVDA
+
+# That's it! 🎉
+```
+
+## What You Can Do
+
+Track AI sector stocks including:
 - **Large Cap AI Leaders** (NVDA, MSFT, GOOGL, META, AMZN, TSLA, AAPL)
 - **AI Startups & IPOs** (C3.ai, Palantir, SoundHound, UiPath)
 - **Pre-IPO Tracking** (OpenAI, Anthropic, Databricks via proxies)
@@ -92,29 +124,41 @@ For detailed setup options, see [SETUP.md](SETUP.md).
 
 ## Usage
 
-### Command Line Tool (FinWiz)
+### Most Common Commands (90% of what you need)
 
-**Get stock data in 1 command - no API keys needed!**
-
-With global installation (recommended):
 ```bash
-finwiz NVDA                    # Quick quote (default)
-finwiz -r NVDA MSFT GOOGL      # Multiple quotes
+finwiz NVDA                    # Get a stock quote
+finwiz NVDA MSFT GOOGL         # Multiple quotes
 finwiz -n NVDA                 # Latest news
-finwiz -f GOOGL                # Financial statements
-finwiz -H MSFT --days 90       # Price history
-finwiz -c NVDA AMD INTC        # Compare stocks
-finwiz -w                      # Show watchlist
-finwiz -b                      # Morning brief
+finwiz -w                      # Show your watchlist
 ```
 
-Or run directly:
+That's it! These 4 commands cover most use cases.
+
+### All Available Commands
+
 ```bash
-python3 finwiz.py NVDA
-./activate_finwiz.sh NVDA
+# Stock Data
+finwiz NVDA                    # Single quote (detailed)
+finwiz -r NVDA MSFT GOOGL      # Multiple quotes (table)
+finwiz -f GOOGL                # Financial statements
+finwiz -H MSFT --days 90       # Price history with stats
+
+# Analysis & Comparison
+finwiz -c NVDA AMD INTC        # Compare stocks side-by-side
+
+# Watchlists & Briefs
+finwiz -w                      # AI stock watchlist
+finwiz -b                      # Morning market brief
+
+# News
+finwiz -n NVDA                 # Latest news for NVDA
+finwiz -n NVDA --limit 10      # More articles
 ```
 
-See [QUICK_START.md](QUICK_START.md) for complete guide.
+**Pro Tip**: All tickers are automatically uppercased. Type `finwiz nvda` or `finwiz NVDA` - both work!
+
+See [CLI_GUIDE.md](CLI_GUIDE.md) for complete documentation with examples, tips, and workflows.
 
 ### Python API Examples
 
